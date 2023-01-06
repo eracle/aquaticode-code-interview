@@ -50,4 +50,5 @@ There are two potential solutions to this issue:
 ### Todo:
 - sepia filter;
 - hue filter;
+- sharpen filter;
 - improving assertions in tests.
