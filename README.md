@@ -25,28 +25,29 @@ How should you write your code?
 - Add comments to your code so we can better assess your thought process
 Your solution will be evaluated according to efficiency, functionality, and code readability.
 
-# Requirements
+### Requirements
 - Docker;
 - docker-compose;
 - make.
 
-# Install
+### Install
     make build
     make up
 Go to http://0.0.0.0:8000
 
-# Test
+### Test
     make test
 
 
-# Possible improvements:
-Videos are currently being encoded using the mp4v format and then back to h264.
-This because the mp4v format causes compatibility issues when viewed in a browser. 
-As a result, the video is converted back to h264 format, increasing processing time and adding noise to the image.
-A solution to this issue could be: to temporary transform the video in a list of images and then reconstruct it back using ffmpeg while bypassing opencv's VideoWriter, which lacks of compatibility with many formats.
-Another solution is to install opencv and openh264 using conda. But that would mean changing the project docker configuration, which is a long way because of all its dependencies.
+### Improvements:
+Videos are currently being encoded using the mp4v format, which causes compatibility issues when viewed in a browser. To fix this issue, the videos are being re-encoded in the h264 format. However, this process takes additional time and can result in a loss of image quality.
 
-# Todo:
+There are two potential solutions to this issue:
+
+1. Transforming the video into a series of images, then reconstructing it using FFmpeg while bypassing the VideoWriter function in OpenCV.
+2. Installing OpenCV and OpenH264 using conda, but this would require updating the project docker configuration and managing its dependencies.
+
+### Todo:
 - sepia filter;
 - hue filter;
 - improving assertions in tests.
