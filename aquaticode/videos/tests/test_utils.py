@@ -6,12 +6,12 @@ import pytest
 from aquaticode.videos.utils import apply_filters
 
 # Get the path to the test files directory
-test_files_dir = pathlib.Path(__file__).parent / 'files'
+test_files_dir = pathlib.Path(__file__).parent / "files"
 
 
 @pytest.fixture
 def video_path():
-    return str(test_files_dir / 'test.mp4')
+    return str(test_files_dir / "test.mp4")
 
 
 @pytest.fixture

@@ -7,4 +7,4 @@ class VideoFactory(DjangoModelFactory):
     class Meta:
         model = Video
 
-    video_file = FileField(filename='test_video.mp4')
+    video_file = FileField(filename="test_video.mp4")

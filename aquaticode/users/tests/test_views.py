@@ -11,11 +11,7 @@ from django.urls import reverse
 from aquaticode.users.forms import UserAdminChangeForm
 from aquaticode.users.models import User
 from aquaticode.users.tests.factories import UserFactory
-from aquaticode.users.views import (
-    UserRedirectView,
-    UserUpdateView,
-    user_detail_view,
-)
+from aquaticode.users.views import UserRedirectView, UserUpdateView, user_detail_view
 
 pytestmark = pytest.mark.django_db
 

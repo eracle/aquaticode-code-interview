@@ -16,7 +16,7 @@ def apply_filters(video_path, brightness, saturation, blur):
     height = int(video.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = video.get(cv2.CAP_PROP_FPS)
 
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
 
     # Random generated filename
     filename = str(uuid.uuid4())
@@ -47,7 +47,18 @@ def apply_filters(video_path, brightness, saturation, blur):
 
     # Convert back to h264 encoding
     h264_output_file_name = f"p-{output_file_name}"
-    subprocess.call(["ffmpeg", "-i", output_file_name, "-c:v", "libx264", "-crf", "20", h264_output_file_name])
+    subprocess.call(
+        [
+            "ffmpeg",
+            "-i",
+            output_file_name,
+            "-c:v",
+            "libx264",
+            "-crf",
+            "20",
+            h264_output_file_name,
+        ]
+    )
 
     # ffmpeg didn't successfully make it
     if not path.exists(h264_output_file_name):
@@ -56,7 +67,7 @@ def apply_filters(video_path, brightness, saturation, blur):
         return None
 
     # Get file content
-    with open(h264_output_file_name, mode='rb') as file:
+    with open(h264_output_file_name, mode="rb") as file:
         file_content = file.read()
 
     # Delete files
@@ -91,4 +102,3 @@ def process_frame(frame, brightness, saturation, blur):
     frame = cv2.cvtColor(np_image, cv2.COLOR_RGB2BGR)
 
     return frame
-

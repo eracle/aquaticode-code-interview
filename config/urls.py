@@ -7,12 +7,12 @@ from django.views import defaults as default_views
 from aquaticode.videos.views import landing_page, video_detail
 
 urlpatterns = [
-                  path("", landing_page, name="landing-page"),
-                  path('<int:pk>/', video_detail, name='video-detail'),
-                  # Django Admin, use {% url 'admin:index' %}
-                  path(settings.ADMIN_URL, admin.site.urls),
-                  # Your stuff: custom urls includes go here
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("", landing_page, name="landing-page"),
+    path("<int:pk>/", video_detail, name="video-detail"),
+    # Django Admin, use {% url 'admin:index' %}
+    path(settings.ADMIN_URL, admin.site.urls),
+    # Your stuff: custom urls includes go here
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
