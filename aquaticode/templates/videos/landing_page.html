@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-1">
+  <nav class="navbar navbar-expand-md navbar-light bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col-6">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+            Upload Video
+          </button>
+        </div>
+        <div class="col-6">
+          {% block download_video %}
+          {% endblock download_video %}
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div class="container mt-5">
+  <div class="row ">
+    <div class="col-8">
+      {% block video %}
+      {% endblock video %}
+    </div>
+    <div class="col-4">
+      {% block effects %}
+      {% endblock effects %}
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadModalLabel">Upload video</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      {% if form %}
+      <form action="{% url 'landing-page' %}" method="post" enctype="multipart/form-data">
+
+        <div class="modal-body">
+          {% csrf_token %}
+          {{ form.as_p }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Upload Video</button>
+        </div>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

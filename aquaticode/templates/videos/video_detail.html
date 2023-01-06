@@ -1,0 +1,24 @@
+{% extends "videos/landing_page.html" %}
+
+
+{% block video %}
+<video src="{{ video.video_file.url }}" controls></video>
+{% endblock video %}
+
+{% block download_video %}
+<a href="{{ video.video_file.url }}" download>
+  <button type="button" class="btn btn-primary">
+    Download video
+  </button>
+</a>
+{% endblock download_video %}
+
+
+{% block effects %}
+<h5>Effects:</h5>
+<form action="{% url 'video-detail' pk=video.pk%}" method="post">
+  {% csrf_token %}
+  {{ filters_form.as_p }}
+  <button type="submit" class="btn btn-primary">Apply Filters</button>
+</form>
+{% endblock effects %}
