@@ -2,7 +2,10 @@
 
 
 {% block video %}
-<video src="{{ video.video_file.url }}" controls></video>
+<div class="embed-responsive embed-responsive-16by9">
+  <video class="embed-responsive-item"
+         src="{{ video.video_file.url }}" controls></video>
+</div>
 {% endblock video %}
 
 {% block download_video %}
