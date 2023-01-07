@@ -2,7 +2,6 @@ import os
 import shutil
 import subprocess
 import uuid
-from os import path
 
 import cv2
 import numpy as np
@@ -11,7 +10,7 @@ from PIL import Image, ImageEnhance
 
 def apply_filters(video_path, brightness, saturation, blur):
     # Create a temporary directory to store the images
-    temp_dir = '/tmp/{}'.format(uuid.uuid4())
+    temp_dir = "/tmp/{}".format(uuid.uuid4())
     os.makedirs(temp_dir)
 
     # Use OpenCV to split the video into images
@@ -30,7 +29,7 @@ def apply_filters(video_path, brightness, saturation, blur):
         # Apply the filters to the frame
         frame = process_frame(frame, brightness, saturation, blur)
 
-        cv2.imwrite(os.path.join(temp_dir, '{:05d}.jpg'.format(i)), frame)
+        cv2.imwrite(os.path.join(temp_dir, "{:05d}.jpg".format(i)), frame)
         i += 1
 
     # Get the Frames per Second
@@ -44,20 +43,22 @@ def apply_filters(video_path, brightness, saturation, blur):
     output_file_name = f"{filename}.mkv"
 
     # Use ffmpeg to rebuild the video from the images
-    subprocess.run([
-        'ffmpeg',
-        '-r',
-        str(fps),
-        '-i',
-        os.path.join(temp_dir, '%05d.jpg'),
-        "-c:v",
-        "libx264",
-        "-preset",
-        "ultrafast",
-        "-qp",
-        "0",
-        output_file_name
-    ])
+    subprocess.run(
+        [
+            "ffmpeg",
+            "-r",
+            str(fps),
+            "-i",
+            os.path.join(temp_dir, "%05d.jpg"),
+            "-c:v",
+            "libx264",
+            "-preset",
+            "ultrafast",
+            "-qp",
+            "0",
+            output_file_name,
+        ]
+    )
 
     # Clean up by deleting the temporary directory
     shutil.rmtree(temp_dir)

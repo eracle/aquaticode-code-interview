@@ -53,7 +53,9 @@ class DetailVideoView(DetailView):
 
             with transaction.atomic():
                 self.object.video_file.delete()
-                self.object.video_file.save(name="video.mp4", content=ContentFile(file_content))
+                self.object.video_file.save(
+                    name="video.mp4", content=ContentFile(file_content)
+                )
 
             context = self.get_context_data(object=self.object)
             context["filters_form"] = form
