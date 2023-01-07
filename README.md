@@ -40,7 +40,7 @@ Go to http://0.0.0.0:8000
 
 
 ### Details on the implementation:
-The standard instal of OpenCV through pip does not include support for writing video files encoded using formats other than mp4v. 
+The standard installation of OpenCV through pip does not include support for writing video files encoded using formats other than mp4v. 
 This format is not compatible with all web browsers, so as a work-around, I read the video file using OpenCV and process each frame as needed. 
 Then save the processed frames to a temporary directory, and use the ffmpeg command-line utility to rebuild the video file from the images.
 
