@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
+from django.db import transaction
 from django.http import HttpResponseServerError
 from django.shortcuts import redirect, render
 from django.views.generic import DetailView
@@ -50,7 +51,9 @@ class DetailVideoView(DetailView):
             if not file_content:
                 return HttpResponseServerError("Error encoding the video")
 
-            self.object.video_file.save(name="video", content=ContentFile(file_content))
+            with transaction.atomic():
+                self.object.video_file.delete()
+                self.object.video_file.save(name="video.mp4", content=ContentFile(file_content))
 
             context = self.get_context_data(object=self.object)
             context["filters_form"] = form
