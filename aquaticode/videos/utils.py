@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 import uuid
 from os import path
@@ -9,20 +10,14 @@ from PIL import Image, ImageEnhance
 
 
 def apply_filters(video_path, brightness, saturation, blur):
+    # Create a temporary directory to store the images
+    temp_dir = '/tmp/{}'.format(uuid.uuid4())
+    os.makedirs(temp_dir)
+
+    # Use OpenCV to split the video into images
     video = cv2.VideoCapture(video_path)
 
-    # Initialize the output video with the same frame size and fps as the input video
-    width = int(video.get(cv2.CAP_PROP_FRAME_WIDTH))
-    height = int(video.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = video.get(cv2.CAP_PROP_FPS)
-
-    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-
-    # Random generated filename
-    filename = str(uuid.uuid4())
-    output_file_name = f"{filename}.mp4"
-    output_video = cv2.VideoWriter(output_file_name, fourcc, fps, (width, height))
-
+    i = 0
     # Process each frame of the input video
     while video.isOpened():
         # Read a frame from the input video
@@ -35,44 +30,44 @@ def apply_filters(video_path, brightness, saturation, blur):
         # Apply the filters to the frame
         frame = process_frame(frame, brightness, saturation, blur)
 
-        output_video.write(frame)
+        cv2.imwrite(os.path.join(temp_dir, '{:05d}.jpg'.format(i)), frame)
+        i += 1
+
+    # Get the Frames per Second
+    fps = video.get(cv2.CAP_PROP_FPS)
 
     # Release the video file handle
     video.release()
-    output_video.release()
 
-    # OpenCV didn't successfully make it
-    if not path.exists(output_file_name):
-        return None
+    # Generate random output file name
+    filename = str(uuid.uuid4())
+    output_file_name = f"{filename}.mkv"
 
-    # Convert back to h264 encoding
-    h264_output_file_name = f"p-{output_file_name}"
-    subprocess.call(
-        [
-            "ffmpeg",
-            "-i",
-            output_file_name,
-            "-c:v",
-            "libx264",
-            "-crf",
-            "20",
-            h264_output_file_name,
-        ]
-    )
+    # Use ffmpeg to rebuild the video from the images
+    subprocess.run([
+        'ffmpeg',
+        '-r',
+        str(fps),
+        '-i',
+        os.path.join(temp_dir, '%05d.jpg'),
+        "-c:v",
+        "libx264",
+        "-preset",
+        "ultrafast",
+        "-qp",
+        "0",
+        output_file_name
+    ])
 
-    # ffmpeg didn't successfully make it
-    if not path.exists(h264_output_file_name):
-        # Delete file
-        os.remove(output_file_name)
-        return None
+    # Clean up by deleting the temporary directory
+    shutil.rmtree(temp_dir)
 
     # Get file content
-    with open(h264_output_file_name, mode="rb") as file:
+    with open(output_file_name, mode="rb") as file:
         file_content = file.read()
 
-    # Delete files
+    # Delete file
     os.remove(output_file_name)
-    os.remove(h264_output_file_name)
 
     return file_content
 

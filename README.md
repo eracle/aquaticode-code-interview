@@ -39,13 +39,11 @@ Go to http://0.0.0.0:8000
     make test
 
 
-### Improvements:
-Videos are currently being encoded using the mp4v format, which causes compatibility issues when viewed in a browser. To fix this issue, the videos are being re-encoded in the h264 format. However, this process takes additional time and can result in a loss of image quality.
+### Details on the implementation:
+The standard instal of OpenCV through pip does not include support for writing video files encoded using formats other than mp4v. 
+This format is not compatible with all web browsers, so as a work-around, I read the video file using OpenCV and process each frame as needed. 
+Then save the processed frames to a temporary directory, and use the ffmpeg command-line utility to rebuild the video file from the images.
 
-There are two potential solutions to this issue:
-
-1. Transforming the video into a series of images, then reconstructing it using FFmpeg while bypassing the VideoWriter function in OpenCV.
-2. Installing OpenCV and OpenH264 using conda, but this would require updating the project docker configuration and managing its dependencies.
 
 ### Todo:
 - sepia filter;
